@@ -7,24 +7,44 @@ namespace DoctorFe.CHaser
     /// <summary>
     /// CHaser のクライアント側のクラス
     /// </summary>
-    public class Client
+    public class CHaserClient
     {
         #region メンバー変数とプロパティ
             public bool IsRunning {get; private set;}
 
+            /// <summary>
+            /// サーバーのIPアドレス
+            /// </summary>
             public IPAddress Address {get; private set;}
+            
+            /// <summary>
+            /// サーバーのポート番号
+            /// </summary>
             public int Port {get; private set;}
+
+            /// <summary>
+            /// 使用中の名前
+            /// </summary>
             public string Name {get; private set;}
 
+            /// <summary>
+            /// 接続に使用するSocketクラス
+            /// </summary>
             private Socket socket;
         #endregion
 
+        /// <summary>
+        /// GetReadyの送信メッセージ
+        /// </summary>
         private static char[] getReady = {'g', 'r', '\r', '\n'};
         
         /// <summary>
         /// サーバーとの通信を確立させ、ユーザー名を送信します。
         /// </summary>
-        public Client(IPAddress address, int port, string name)
+        /// <param name="address">サーバーのIPアドレス</param>
+        /// <param name="port">サーバーのポート番号</param>
+        /// <param name="name">今回のゲームで使用する名前</param>
+        public CHaserClient(IPAddress address, int port, string name)
         {
             this.Address = address;
             this.Port = port;
@@ -48,10 +68,10 @@ namespace DoctorFe.CHaser
 
         /// <summary>
         /// 動作を指定し、サーバー側に送信します。
-        /// <param name="type">動作の種類を指定します。</param>
-        /// <param name="dir">動作をする方向を指定します。</param>
-        /// <returns>サーバーからの応答</returns>
         /// </summary>
+        /// <param name="type">動作の種類</param>
+        /// <param name="dir">動作をする方向</param>
+        /// <returns>サーバーからの応答</returns>
         public ActionResult DoAction(ActionType type, Direction dir)
         {
             return Input(string.Format("{0}{1}", (char)type, (char)dir));
@@ -97,7 +117,7 @@ namespace DoctorFe.CHaser
         /// <summary>
         /// 実際に送信するメソッドはこれです。
         /// </summary>
-        /// <param name="input">送信する内部的な文字列。</param>
+        /// <param name="input">送信する内部的な文字列</param>
         /// <returns>サーバーからの応答</returns>
         private ActionResult Input(string input)
         {
